@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package uk.co.grahamcox.mdb.schema.datatype;
+package uk.co.grahamcox.mdb.schema;
 
 /**
  * Base class from which all of the data types spring forth

@@ -17,6 +17,7 @@
 
 package uk.co.grahamcox.mdb.schema.datatype;
 
+import uk.co.grahamcox.mdb.schema.DataType;
 import javax.validation.constraints.Min;
 
 /**
