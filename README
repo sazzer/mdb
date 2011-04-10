@@ -1,0 +1,4 @@
+mdb is a build tool for developing PostgreSQL databases. It will allow you to write a single set of scripts that describe
+the database, and then create a database from those scripts, either starting from blank or else mutating an existing database
+to correctly match the state of the scripts.
+
