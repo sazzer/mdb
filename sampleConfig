@@ -1,0 +1,38 @@
+The below is a snippet of JSON configuration that represents the following SQL
+
+CREATE SCHEMA users;
+CREATE TABLE users.user (
+	id INTEGER NOT NULL, 
+	name VARCHAR(1000) NOT NULL, 
+	email VARCHAR(1000) NOT NULL, 
+	enabled BOOLEAN NULL DEFAULT FALSE, 
+	age INTEGER NOT NULL,
+
+	PRIMARY KEY (id),
+	UNIQUE (name),
+	UNIQUE (email),
+	CHECK (age > 0)
+
+{
+	schemas: {
+		users: {
+			tables: {
+				user: {
+					columns: {
+						id: {type: {name: "number"}, nullable: false}, 
+						name: {type: {name: "string", size: 1000}, nullable: false}, 
+						email: {type: {name: "string", size: 1000}, nullable: false},
+						enabled: {type: {name: "boolean"}, default: "false"},
+						age: {type: {name: "number"}, nullable: false}
+					}, 
+					key: ["id"], 
+					constraints: [
+						{type: "unique", columns: ["name"]},
+						{type: "unique", columns: ["email"]},
+						{type: "check", sql: "age > 0"}
+					]
+				}
+			}
+		}
+	}
+}
