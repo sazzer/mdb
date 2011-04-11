@@ -30,7 +30,7 @@ import javax.validation.constraints.Size;
 public class Table {
     /** The name of the table */
     @NotNull
-    private String name = null;
+    private final String name;
     /** The comment on the table */
     private String comment = null;
     /** The set of columns that make up the tables key */
@@ -38,7 +38,17 @@ public class Table {
     private Set<Column> keyColumns = new HashSet<Column>();
     /** The set of columns that make up the rest of the table */
     private Set<Column> columns = new HashSet<Column>();
-    
+
+    /**
+     * Create the table
+     * @param name the name of the table
+     */
+    public Table(String name)
+    {
+        this.name = name;
+    }
+
+
     /**
      * Get the key columns
      * @return the key columns
@@ -100,14 +110,6 @@ public class Table {
      */
     public String getName() {
         return name;
-    }
-
-    /**
-     * Set the name of the table
-     * @param name the name
-     */
-    public void setName(String name) {
-        this.name = name;
     }
 
     /**

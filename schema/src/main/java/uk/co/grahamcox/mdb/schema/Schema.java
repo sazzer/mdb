@@ -19,8 +19,8 @@ package uk.co.grahamcox.mdb.schema;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -30,11 +30,21 @@ import javax.validation.constraints.NotNull;
 public class Schema {
     /** The name of the schema */
     @NotNull
-    private String name = null;
+    private final String name;
     /** The comment on the schema */
     private String comment = null;
     /** The tables in the schema */
-    private Set<Table> tables = new HashSet<Table>();
+    private Map<String, Table> tables = new HashMap<String, Table>();
+
+    /**
+     * Create the schema
+     * @param name the name of the schema
+     */
+    public Schema(String name)
+    {
+        this.name = name;
+    }
+
 
     /**
      * Get the comment on the schema
@@ -64,20 +74,11 @@ public class Schema {
     }
 
     /**
-     * Set the name of the schema
-     * @param name the name
-     */
-    public void setName(String name)
-    {
-        this.name = name;
-    }
-
-    /**
      * Get the tables in the schema
      * @return the tables
      */
     public Collection<Table> getTables() {
-        return Collections.unmodifiableCollection(tables);
+        return Collections.unmodifiableCollection(tables.values());
     }
 
     /**
@@ -85,20 +86,7 @@ public class Schema {
      * @param table the table to add
      */
     public void addTable(Table table) {
-        confirmUniqueName(table.getName());
-        tables.add(table);
-    }
-
-    /**
-     * Confirm that the given name isn't already used in the schema
-     * @param name the name to check
-     */
-    private void confirmUniqueName(String name) {
-        for (Table table : tables) {
-            if (name.equals(table.getName())) {
-                throw new IllegalArgumentException("Table with name " + name + " already exists in schema");
-            }
-        }
+        tables.put(table.getName(), table);
     }
 
     /**

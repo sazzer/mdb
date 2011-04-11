@@ -26,7 +26,7 @@ import javax.validation.constraints.NotNull;
 public class Column {
     /** The name of the column */
     @NotNull
-    private String name;
+    private final String name;
     /** The comment on the column */
     private String comment = null;
     /** The data type of the column */
@@ -38,6 +38,16 @@ public class Column {
     
     /** The default value of the column. Contains a snippet of SQL, so literal String values must contain ' characters */
     private String defaultValue = null;
+
+    /**
+     * Create the column
+     * @param name the name of the column
+     */
+    public Column(String name)
+    {
+        this.name = name;
+    }
+
 
     /**
      * Get the data type
@@ -94,17 +104,7 @@ public class Column {
     public String getName() {
         return name;
     }
-
-    /**
-     * Set the name of the column
-     * @param name the name
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
     
-
-
     /**
      * Get the comment on the column
      * @return the comment
