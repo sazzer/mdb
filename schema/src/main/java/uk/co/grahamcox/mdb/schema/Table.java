@@ -31,6 +31,8 @@ public class Table {
     /** The name of the table */
     @NotNull
     private String name = null;
+    /** The comment on the table */
+    private String comment = null;
     /** The set of columns that make up the tables key */
     @Size(min=1)
     private Set<Column> keyColumns = new HashSet<Column>();
@@ -107,6 +109,86 @@ public class Table {
     public void setName(String name) {
         this.name = name;
     }
-    
+
+    /**
+     * Get the comment on the table
+     * @return the comment
+     */
+    public String getComment()
+    {
+        return comment;
+    }
+
+    /**
+     * Set the comment on the table
+     * @param comment the comment
+     */
+    public void setComment(String comment)
+    {
+        this.comment = comment;
+    }
+
+    /**
+     * Compare to another object for equality
+     * @param obj the object to compare to
+     * @return True if equal. False if not
+     */
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final Table other = (Table) obj;
+        if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name))
+        {
+            return false;
+        }
+        if ((this.comment == null) ? (other.comment != null) : !this.comment.equals(other.comment))
+        {
+            return false;
+        }
+        if (this.keyColumns != other.keyColumns && (this.keyColumns == null || !this.keyColumns.equals(other.keyColumns)))
+        {
+            return false;
+        }
+        if (this.columns != other.columns && (this.columns == null || !this.columns.equals(other.columns)))
+        {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Generate a hashcode for the object
+     * @return the hashcode
+     */
+    @Override
+    public int hashCode()
+    {
+        int hash = 7;
+        hash = 29 * hash + (this.name != null ? this.name.hashCode() : 0);
+        hash = 29 * hash + (this.comment != null ? this.comment.hashCode() : 0);
+        hash = 29 * hash + (this.keyColumns != null ? this.keyColumns.hashCode() : 0);
+        hash = 29 * hash + (this.columns != null ? this.columns.hashCode() : 0);
+        return hash;
+    }
+
+    /**
+     * Generate a string for the object
+     * @return the string
+     */
+    @Override
+    public String toString()
+    {
+        return "Table{" + "name=" + name + "comment=" + comment + "keyColumns=" + keyColumns + "columns=" + columns + '}';
+    }
+
+
     
 }

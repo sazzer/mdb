@@ -27,6 +27,8 @@ public class Column {
     /** The name of the column */
     @NotNull
     private String name;
+    /** The comment on the column */
+    private String comment = null;
     /** The data type of the column */
     @NotNull
     private DataType dataType;
@@ -101,32 +103,61 @@ public class Column {
         this.name = name;
     }
     
-    
+
+
+    /**
+     * Get the comment on the column
+     * @return the comment
+     */
+    public String getComment()
+    {
+        return comment;
+    }
+
+    /**
+     * Set the comment on the column
+     * @param comment the comment
+     */
+    public void setComment(String comment)
+    {
+        this.comment = comment;
+    }
 
     /**
      * Compare to another object for equality
-     * @param obj the object to compare with
+     * @param obj the object to compare to
      * @return True if equal. False if not
      */
     @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
+    public boolean equals(Object obj)
+    {
+        if (obj == null)
+        {
             return false;
         }
-        if (getClass() != obj.getClass()) {
+        if (getClass() != obj.getClass())
+        {
             return false;
         }
         final Column other = (Column) obj;
-        if (this.dataType != other.dataType && (this.dataType == null || !this.dataType.equals(other.dataType))) {
+        if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name))
+        {
             return false;
         }
-        if (this.nullable != other.nullable) {
+        if ((this.comment == null) ? (other.comment != null) : !this.comment.equals(other.comment))
+        {
             return false;
         }
-        if ((this.defaultValue == null) ? (other.defaultValue != null) : !this.defaultValue.equals(other.defaultValue)) {
+        if (this.dataType != other.dataType && (this.dataType == null || !this.dataType.equals(other.dataType)))
+        {
             return false;
         }
-        if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
+        if (this.nullable != other.nullable)
+        {
+            return false;
+        }
+        if ((this.defaultValue == null) ? (other.defaultValue != null) : !this.defaultValue.equals(other.defaultValue))
+        {
             return false;
         }
         return true;
@@ -137,12 +168,14 @@ public class Column {
      * @return the hashcode
      */
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         int hash = 7;
-        hash = 97 * hash + (this.dataType != null ? this.dataType.hashCode() : 0);
-        hash = 97 * hash + (this.nullable ? 1 : 0);
-        hash = 97 * hash + (this.defaultValue != null ? this.defaultValue.hashCode() : 0);
-        hash = 97 * hash + (this.name != null ? this.name.hashCode() : 0);
+        hash = 47 * hash + (this.name != null ? this.name.hashCode() : 0);
+        hash = 47 * hash + (this.comment != null ? this.comment.hashCode() : 0);
+        hash = 47 * hash + (this.dataType != null ? this.dataType.hashCode() : 0);
+        hash = 47 * hash + (this.nullable ? 1 : 0);
+        hash = 47 * hash + (this.defaultValue != null ? this.defaultValue.hashCode() : 0);
         return hash;
     }
 
@@ -151,14 +184,10 @@ public class Column {
      * @return the string
      */
     @Override
-    public String toString() {
-        return "Column{" 
-                + "name=" + name 
-                + ", dataType=" + dataType 
-                + ", nullable=" + nullable 
-                + ", defaultValue=" + defaultValue 
-                + '}';
+    public String toString()
+    {
+        return "Column{" + "name=" + name + "comment=" + comment + "dataType=" + dataType + "nullable=" + nullable + "defaultValue=" + defaultValue + '}';
     }
-    
+
     
 }
