@@ -8,6 +8,7 @@
   <name>MDB - Make tool for Databases</name>
   <modules>
     <module>schema</module>
+    <module>jsonloader</module>
   </modules>
   <inceptionYear>2011</inceptionYear>
   <developers>
@@ -68,9 +69,9 @@
         <scope>test</scope>
       </dependency>
       <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>4.8.2</version>
+        <groupId>org.testng</groupId>
+        <artifactId>testng</artifactId>
+        <version>6.0.1</version>
         <scope>test</scope>
       </dependency>
       <dependency>
@@ -120,6 +121,12 @@
         <artifactId>spring-cli</artifactId>
         <version>0.6</version>
       </dependency>
+      <dependency>    
+         <groupId>net.sf.json-lib</groupId>    
+         <artifactId>json-lib</artifactId>    
+         <version>2.4</version>    
+         <classifier>jdk15</classifier>    
+      </dependency>   
     </dependencies>
   </dependencyManagement>
   <dependencies>
@@ -136,8 +143,8 @@
       <artifactId>easymock</artifactId>
     </dependency>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
+      <groupId>org.testng</groupId>
+      <artifactId>testng</artifactId>
     </dependency>
     <dependency>
       <groupId>javax.validation</groupId>

@@ -39,6 +39,14 @@ public class Database {
     }
 
     /**
+     * Get the given schema by name
+     * @param name the name of the schema
+     * @return the schema
+     */
+    public Schema getSchema(String name) {
+        return schemas.get(name);
+    }
+    /**
      * Add a table to the database
      * @param schema the table to add
      */

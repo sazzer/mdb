@@ -1,0 +1,9 @@
+{
+    "schemas": {
+        "users": {
+            "comment": "This is the Users schema" 
+        },
+        "utils": {
+        } 
+    }
+}
