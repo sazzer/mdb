@@ -1,0 +1,23 @@
+{
+        "schemas": {
+                "users": {
+                        "tables": {
+                                "user": {
+                                        "columns": {
+                                                "id": {"type": {"name": "number"}, "nullable": false},
+                                                "name": {"type": {"name": "string", "size": 1000}, "nullable": false},
+                                                "email": {"type": {"name": "string", "size": 1000}, "nullable": false},
+                                                "enabled": {"type": {"name": "boolean"}, "default": "false"},
+                                                "age": {"type": {"name": "number"}, "nullable": false}
+                                        },
+                                        "key": ["id"],
+                                        "constraints": [
+                                                {"type": "unique", "columns": ["name"]},
+                                                {"type": "unique", "columns": ["email"]},
+                                                {"type": "check", "sql": "age > 0"}
+                                        ]
+                                }
+                        }
+                }
+        }
+}

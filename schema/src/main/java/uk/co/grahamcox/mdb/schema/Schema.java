@@ -82,6 +82,14 @@ public class Schema {
     }
 
     /**
+     * Get the requested table from the schema
+     * @param name the name of the table
+     * @return the table
+     */
+    public Table getTable(String name) {
+        return tables.get(name);
+    }
+    /**
      * Add a table to the schema
      * @param table the table to add
      */

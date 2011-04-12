@@ -18,7 +18,9 @@
 package uk.co.grahamcox.mdb.schema;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -35,10 +37,10 @@ public class Table {
     private String comment = null;
     /** The set of columns that make up the tables key */
     @Size(min=1)
-    private Set<Column> keyColumns = new HashSet<Column>();
+    private Set<String> keyColumns = new HashSet<String>();
     /** The set of columns that make up the rest of the table */
-    private Set<Column> columns = new HashSet<Column>();
-
+    private Map<String, Column> columns = new HashMap<String, Column>();
+    
     /**
      * Create the table
      * @param name the name of the table
@@ -54,33 +56,42 @@ public class Table {
      * @return the key columns
      */
     public Set<Column> getKeyColumns() {
-        return Collections.unmodifiableSet(keyColumns);
+        Set<Column> keys = new HashSet<Column>();
+        for (String k : keyColumns) {
+            keys.add(columns.get(k));
+        }
+        return Collections.unmodifiableSet(keys);
     }
     /**
      * Get the standard columns - i.e. those that are not part of the key
      * @return the standard columns
      */
     public Set<Column> getStandardColumns() {
-        return Collections.unmodifiableSet(keyColumns);
+        Set<Column> allColumns = new HashSet<Column>(columns.values());
+        for (String k : keyColumns) {
+            allColumns.remove(columns.get(k));
+        }
+        return Collections.unmodifiableSet(allColumns);
     }
     /**
      * Get all of the columns
      * @return the columns
      */
     public Set<Column> getAllColumns() {
-        Set<Column> allColumns = new HashSet<Column>(this.columns);
-        allColumns.addAll(keyColumns);
+        Set<Column> allColumns = new HashSet<Column>(columns.values());
         return Collections.unmodifiableSet(allColumns);
     }
-
+    
+    public Column getColumn(String name) {
+        return columns.get(name);
+    }
     /**
      * Add a column to the table. There must not be any columns with the same name
      * already registered
      * @param c the column to add
      */
     public void addColumn(Column c) {
-        confirmUniqueName(c.getName());
-        columns.add(c);
+        columns.put(c.getName(), c);
     }
     
     /**
@@ -89,21 +100,10 @@ public class Table {
      * @param c the column to add
      */
     public void addKeyColumn(Column c) {
-        confirmUniqueName(c.getName());
-        keyColumns.add(c);
+        columns.put(c.getName(), c);
+        keyColumns.add(c.getName());
     }
     
-    /**
-     * Confirm that there are no columns with the given name already registered
-     * @param name the name to check for
-     */
-    private void confirmUniqueName(final String name) {
-        for (Column c : getAllColumns()) {
-            if (name.equals(c.getName())) {
-                throw new IllegalArgumentException("Column with name " + name + " already exists in table");
-            }
-        }
-    }
     /**
      * Get the name of the table
      * @return the name of the table
