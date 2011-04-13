@@ -19,13 +19,14 @@ package uk.co.grahamcox.mdb.schema.datatype;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import uk.co.grahamcox.mdb.schema.DataType;
 
 /**
  * Representation of an Exact Numeric data type
  * The default if not changed is NUMERIC(38, 0)
  * @author graham
  */
-public class NumberDataType {
+public class NumberDataType implements DataType {
     /** The precision of the number */
     @Min(1)
     @Max(38)

@@ -33,9 +33,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import uk.co.grahamcox.mdb.loader.LoadException;
 import uk.co.grahamcox.mdb.schema.Column;
+import uk.co.grahamcox.mdb.schema.DataType;
 import uk.co.grahamcox.mdb.schema.Database;
 import uk.co.grahamcox.mdb.schema.Schema;
 import uk.co.grahamcox.mdb.schema.Table;
+import uk.co.grahamcox.mdb.schema.datatype.BooleanDataType;
+import uk.co.grahamcox.mdb.schema.datatype.NumberDataType;
+import uk.co.grahamcox.mdb.schema.datatype.StringDataType;
 
 /**
  * Load a given JSON File into the Database object
@@ -132,7 +136,11 @@ public class JsonLoader {
         }
         LOG.debug("Adding table: " + tableName);
         Table table = new Table(tableName);
-        schema.addTable(table);
+        
+        if (object.has("comment")) {
+            table.setComment(object.getString("comment"));
+        }
+        
         Set<String> keyNames = new HashSet<String>();
         if (object.has("key")) {
             JSONArray keys = object.getJSONArray("key");
@@ -153,6 +161,8 @@ public class JsonLoader {
                 parseJsonColumn(table, columnName, isKey, columnObject);
             }
         }
+
+        schema.addTable(table);
     }
     
     /**
@@ -175,11 +185,42 @@ public class JsonLoader {
             column.setNullable(object.getBoolean("nullable"));
         }
         
+        if (object.has("comment")) {
+            column.setComment(object.getString("comment"));
+        }
+        
         if (isKey) {
             table.addKeyColumn(column);
         }
         else {
             table.addColumn(column);
         }
+        
+        if (object.has("type")) {
+            JSONObject dataTypeObject = object.getJSONObject("type");
+            DataType dataType = parseJsonDataType(dataTypeObject);
+            column.setDataType(dataType);
+        }
+    }
+    /**
+     * Parse a DataType out of the given JSONObject
+     * @param object the object to parse
+     * @return the DataType object
+     */
+    private DataType parseJsonDataType(JSONObject object) {
+        DataType result = null;
+        String typeName = object.getString("name");
+        if ("number".equals(typeName)) {
+            NumberDataType dt = new NumberDataType();
+            result = dt;
+        }
+        else if ("string".equals(typeName)) {
+            StringDataType dt = new StringDataType();
+            result = dt;
+        }
+        else if ("boolean".equals(typeName)) {
+            result = new BooleanDataType();
+        }
+        return result;
     }
 }

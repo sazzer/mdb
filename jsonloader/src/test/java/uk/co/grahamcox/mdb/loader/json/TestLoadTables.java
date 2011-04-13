@@ -63,7 +63,7 @@ public class TestLoadTables {
         Assert.assertTrue(database.getSchema("users").getTable("user").getColumn("enabled").isNullable());
         Assert.assertFalse(database.getSchema("users").getTable("user").getColumn("age").isNullable());
         
-        Assert.assertTrue(database.getSchema("users").getTable("user").getColumn("id").getDataType() instanceof StringDataType);
+        Assert.assertTrue(database.getSchema("users").getTable("user").getColumn("id").getDataType() instanceof NumberDataType);
         Assert.assertTrue(database.getSchema("users").getTable("user").getColumn("name").getDataType() instanceof StringDataType);
         Assert.assertTrue(database.getSchema("users").getTable("user").getColumn("email").getDataType() instanceof StringDataType);
         Assert.assertTrue(database.getSchema("users").getTable("user").getColumn("enabled").getDataType() instanceof BooleanDataType);

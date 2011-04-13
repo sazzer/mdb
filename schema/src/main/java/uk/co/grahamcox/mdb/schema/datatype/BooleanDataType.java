@@ -17,11 +17,13 @@
 
 package uk.co.grahamcox.mdb.schema.datatype;
 
+import uk.co.grahamcox.mdb.schema.DataType;
+
 /**
  * Representation of a Boolean data type
  * @author graham
  */
-public class BooleanDataType {
+public class BooleanDataType implements DataType {
 
     /**
      * Generate a string for the object
