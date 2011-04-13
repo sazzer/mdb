@@ -115,8 +115,14 @@ public class JsonLoader {
                     Iterator<String> tablesIter = schemaObject.getJSONObject("tables").keys();
                     while (tablesIter.hasNext()) {
                         String tableName = tablesIter.next();
+                        if (schema.getTable(tableName) != null) {
+                            throw new LoadException("Duplicate definition of table " + tableName + " in schema " + schema.getName());
+                        }
+                        LOG.debug("Adding table: " + tableName);
+
                         JSONObject tableObject = schemaObject.getJSONObject("tables").getJSONObject(tableName);
-                        parseJsonTable(schema, tableName, tableObject);
+                        Table table = parseJsonTable(tableName, tableObject);
+                        schema.addTable(table);
                     }
                 }
             }
@@ -125,16 +131,12 @@ public class JsonLoader {
     
     /**
      * Parse the part of the JSON that represents a table in a schema
-     * @param schema the schema
      * @param tableName the name of the table
      * @param object the JSONObject representing the table
+     * @return the parsed table
      * @throws LoadException if an error occurs
      */
-    private void parseJsonTable(Schema schema, String tableName, JSONObject object) throws LoadException {
-        if (schema.getTable(tableName) != null) {
-            throw new LoadException("Duplicate definition of table " + tableName + " in schema " + schema.getName());
-        }
-        LOG.debug("Adding table: " + tableName);
+    private Table parseJsonTable(String tableName, JSONObject object) throws LoadException {
         Table table = new Table(tableName);
         
         if (object.has("comment")) {
@@ -156,29 +158,36 @@ public class JsonLoader {
             Iterator<String> columnIter = object.getJSONObject("columns").keys();
             while (columnIter.hasNext()) {
                 String columnName = columnIter.next();
+                
+                if (table.getColumn(columnName) != null) {
+                    throw new LoadException("Duplicate definition of column " + columnName + " in table " + table.getName());
+                }
+                LOG.debug("Adding column " + columnName);
+
                 boolean isKey = (keyNames.contains(columnName));
                 JSONObject columnObject = object.getJSONObject("columns").getJSONObject(columnName);
-                parseJsonColumn(table, columnName, isKey, columnObject);
+                Column column = parseJsonColumn(columnName, columnObject);
+        
+                if (isKey) {
+                    table.addKeyColumn(column);
+                }
+                else {
+                    table.addColumn(column);
+                }
             }
         }
 
-        schema.addTable(table);
+        return table;
     }
     
     /**
      * Parse the part of the JSON that represents a column in a table
-     * @param table the table
      * @param columnName the name of the column
-     * @param isKey whether the column is a key or not
      * @param object the JSONObject representing the column
+     * @return the parsed column
      * @throws LoadException if an error occurs
      */
-    private void parseJsonColumn(Table table, String columnName, boolean isKey, JSONObject object) throws LoadException {
-        if (table.getColumn(columnName) != null) {
-            throw new LoadException("Duplicate definition of column " + columnName + " in table " + table.getName());
-        }
-        LOG.debug("Adding column " + columnName);
-                
+    private Column parseJsonColumn(String columnName, JSONObject object) throws LoadException {                
         Column column = new Column(columnName);
 
         if (object.has("nullable")) {
@@ -189,18 +198,13 @@ public class JsonLoader {
             column.setComment(object.getString("comment"));
         }
         
-        if (isKey) {
-            table.addKeyColumn(column);
-        }
-        else {
-            table.addColumn(column);
-        }
-        
         if (object.has("type")) {
             JSONObject dataTypeObject = object.getJSONObject("type");
             DataType dataType = parseJsonDataType(dataTypeObject);
             column.setDataType(dataType);
         }
+        
+        return column;
     }
     /**
      * Parse a DataType out of the given JSONObject
